@@ -14,36 +14,39 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type CreateUserFormData = {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+};
 
 export default function CreateUser() {
-  type SignUpFormData = {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-  };
-
-  const SignUpSchema = yup.object().shape({
+  const CreateUserSchema = yup.object().shape({
     name: yup.string().required("nome obrigatório"),
-    email: yup.string().required("email obrigatório").email(),
+    email: yup
+      .string()
+      .required("email obrigatório")
+      .email("Precisa ser um e-mail"),
     password: yup
       .string()
       .required("senha obrigatória")
       .min(6, "Mínimo de 6 caracteres"),
     password_confirmation: yup
       .string()
-      .oneOf([null, yup.ref("password")], "Senha precisa ser igual"),
+      .required("Confirmação de senha obrigatória")
+      .oneOf([yup.ref("password")], "Senha precisa ser igual"),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(SignUpSchema) });
+  } = useForm({ resolver: yupResolver(CreateUserSchema) });
 
-  const handleSignUpUser: SubmitHandler<SignUpFormData> = async (value) => {
+  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (value) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     console.log(value);
@@ -56,7 +59,7 @@ export default function CreateUser() {
         <Sidebar />
         <Box
           as="form"
-          onSubmit={handleSubmit(handleSignUpUser)}
+          onSubmit={handleSubmit(handleCreateUser)}
           flex="1"
           borderRadius={8}
           bg="gray.800"
@@ -69,39 +72,35 @@ export default function CreateUser() {
           <VStack spacing="8">
             <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
               <Input
-                name="name"
                 label="Nome completo"
-                {...register}
+                {...register("name")}
                 error={errors.name}
               />
               <Input
-                name="email"
                 label="Email:"
-                {...register}
+                {...register("email")}
                 error={errors.email}
               />
             </SimpleGrid>
 
             <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
               <Input
-                name="password"
                 type="password"
                 label="Senha"
-                {...register}
+                {...register("password")}
                 error={errors.password}
               />
               <Input
-                name="password_confirmation"
                 type="password"
                 label="Confirmação de senha"
                 error={errors.password_confirmation}
-                {...register}
+                {...register("password_confirmation")}
               />
             </SimpleGrid>
           </VStack>
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
-              <Link href="users/create" passHref>
+              <Link href="users" passHref>
                 <Button colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
               <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>

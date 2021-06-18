@@ -41,18 +41,17 @@ export default function Home() {
       >
         <Stack>
           <Input
-            name="email"
             type="email"
             label="E-mail:"
             error={errors.email}
-            {...register}
+            {...register("email")}
           />
           <Input
             name="password"
             type="password"
             label="Password:"
             error={errors.password}
-            {...register}
+            {...register("password")}
           />
 
           <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>
