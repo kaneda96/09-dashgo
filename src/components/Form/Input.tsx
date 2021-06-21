@@ -29,8 +29,8 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         variant="filled"
         _hover={{ bgColor: "gray.900" }}
         size="lg"
-        ref={ref}
         {...rest}
+        ref={ref}
       />
       {!!error && <FormErrorMessage>{error.message}</FormErrorMessage>}
     </FormControl>

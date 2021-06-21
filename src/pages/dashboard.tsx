@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { Box, Flex, SimpleGrid, Text, Theme } from "@chakra-ui/react";
 import { Sidebar } from "./../components/Sidebar";
 import { theme } from "../styles/theme";
+import { ApexOptions } from "apexcharts";
 
 /* IMPORTANTE LEMBRAR */
 // Está biblioteca em específico precisa da referência do window que fica no lado do client
@@ -17,7 +18,7 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 });
 
 //Todas essas opções
-const options = {
+const options: ApexOptions = {
   chart: {
     toolbar: {
       show: false,
